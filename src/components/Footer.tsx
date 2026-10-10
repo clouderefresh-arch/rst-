@@ -1,6 +1,6 @@
 import { Clock, MapPin, Phone } from "lucide-react";
 import { Logo } from "@/components/Logo";
-import { MAP_EMBED, MAP_LINK, NAV, PHONE_DISPLAY, PHONE_HREF } from "@/lib/site";
+import { MAP_EMBED, MAP_LINK, NAV, PHONE_DISPLAY, PHONE_HREF, SERVICE_ADDRESS, WORK_HOURS } from "@/lib/site";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -30,6 +30,7 @@ export function Footer() {
                 <span>
                   <span className="block font-semibold">Города обслуживания</span>
                   <span className="text-white/75">Подольск и Климовск</span>
+                  <span className="mt-1 block text-white/75">{SERVICE_ADDRESS}</span>
                 </span>
               </li>
               <li className="flex gap-3">
@@ -45,7 +46,7 @@ export function Footer() {
                 <Clock className="mt-0.5 h-5 w-5 shrink-0 text-orange-400" aria-hidden />
                 <span>
                   <span className="block font-semibold">График работы</span>
-                  <span className="text-white/75">Ежедневно, по записи</span>
+                  <span className="text-white/75">{WORK_HOURS}</span>
                 </span>
               </li>
             </ul>
@@ -93,8 +94,8 @@ export function Footer() {
           <div id="privacy">
             <p className="text-sm font-semibold uppercase tracking-[0.16em] text-white">Реквизиты и данные</p>
             <p className="mt-4 text-sm leading-relaxed">
-              ООО «РТК». Города обслуживания: Подольск и Климовск. Телефон: {PHONE_DISPLAY}. График: ежедневно,
-              по записи. Полные реквизиты для договора направляем по запросу.
+              ООО «РТК». {SERVICE_ADDRESS}. Города обслуживания: Подольск и Климовск. Телефон: {PHONE_DISPLAY}.
+              График: {WORK_HOURS.toLowerCase()}. Полные реквизиты для договора направляем по запросу.
             </p>
             <p className="mt-3 text-sm leading-relaxed">
               Отправляя заявку, вы соглашаетесь на обработку персональных данных — имени, телефона, сведений об

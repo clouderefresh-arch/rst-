@@ -23,7 +23,7 @@ function HeroStripes() {
         <polygon points="1120,-90 1420,-90 1160,880 840,880" fill="url(#rtk-orange)" />
         <polygon points="1320,-40 1620,20 1360,900 1100,820" fill="#dc2626" />
       </svg>
-      <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink/80 to-ink/25 lg:bg-gradient-to-r lg:from-ink lg:via-ink/72 lg:to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink/45 to-transparent lg:bg-gradient-to-r lg:from-ink lg:via-ink/60 lg:to-transparent" />
     </div>
   );
 }

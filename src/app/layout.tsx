@@ -37,8 +37,15 @@ const jsonLd = {
   "@type": "AutoRepair",
   name: "ООО «РТК»",
   telephone: PHONE_DISPLAY,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "ул. Леспромхоза, 10",
+    addressLocality: "посёлок Сосновый Бор",
+    addressRegion: "Московская область",
+    addressCountry: "RU",
+  },
   areaServed: ["Подольск", "Климовск", "Россия"],
-  openingHours: "Mo-Su",
+  openingHours: "Mo-Su 08:00-21:00",
   description:
     "Сервисное обслуживание и ремонт легкового, грузового транспорта и спецтехники. Оптово-розничные поставки запчастей.",
 };

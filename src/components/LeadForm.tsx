@@ -153,7 +153,7 @@ export function LeadForm() {
           name="consent"
           type="checkbox"
           required
-          className="mt-0.5 h-5 w-5 shrink-0 rounded border-white accent-red-700"
+          className="mt-0.5 h-5 w-5 shrink-0 rounded border-white bg-white accent-red-600"
         />
         <span>
           Согласен на обработку персональных данных для связи по заявке.{" "}
