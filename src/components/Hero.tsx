@@ -1,3 +1,4 @@
+import { HeroCar } from "@/components/HeroCar";
 import { LeadForm } from "@/components/LeadForm";
 
 function HeroStripes() {
@@ -32,7 +33,7 @@ export function Hero() {
   return (
     <section id="top" className="relative overflow-hidden bg-ink pb-28 text-white sm:pb-32">
       <HeroStripes />
-      <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 pt-8 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6 lg:px-8 lg:pt-14">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 pt-8 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:gap-10 lg:px-8 lg:pt-14">
         <div>
           <p className="inline-flex max-w-full items-center rounded-full bg-gradient-to-r from-red-600 to-orange-500 px-3 py-1.5 text-xs font-semibold text-white shadow-lg shadow-red-950/40 sm:text-sm">
             г. Подольск • г. Климовск • Доставка по всей РФ
@@ -60,19 +61,7 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="relative mx-auto w-full max-w-[540px] lg:max-w-none">
-          <div className="absolute bottom-3 left-1/2 h-8 w-4/5 -translate-x-1/2 rounded-full bg-black/50 blur-xl" aria-hidden />
-          {/* Cutout sits on the diagonal plates; next/image would flatten the shadow. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/hero-car.png"
-            alt="Белый кроссовер — легковой автотранспорт на обслуживании РТК"
-            width={640}
-            height={382}
-            fetchPriority="high"
-            className="relative mx-auto h-auto w-full drop-shadow-[0_28px_36px_rgba(0,0,0,0.45)] motion-safe:animate-float"
-          />
-        </div>
+        <HeroCar />
       </div>
 
       <div className="relative z-20 mx-auto -mb-40 mt-8 max-w-5xl px-4 sm:-mb-44 sm:px-6 lg:px-8">
