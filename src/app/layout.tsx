@@ -1,17 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import localFont from "next/font/local";
+import { Manrope } from "next/font/google";
 import { PHONE_DISPLAY } from "@/lib/site";
 import "./globals.css";
 
-// ST-Stengazeta Regular, Alexander Shimanov. Free license (desktop + webfont):
-// https://shimanov.pro/st-stengazeta
-const stengazeta = localFont({
-  src: "../fonts/ST-Stengazeta.woff2",
-  weight: "400",
-  style: "normal",
+const manrope = Manrope({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
-  fallback: ["Arial", "Helvetica", "sans-serif"],
-  adjustFontFallback: "Arial",
 });
 
 export const metadata: Metadata = {
@@ -58,7 +53,7 @@ const jsonLd = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ru">
-      <body className={`${stengazeta.className} min-h-screen overflow-x-clip antialiased`}>
+      <body className={`${manrope.className} min-h-screen overflow-x-clip antialiased`}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         {children}
       </body>
