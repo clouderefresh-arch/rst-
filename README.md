@@ -15,6 +15,10 @@ npm run dev
 
 Продакшен-сборка: `npm run build && npm run start`.
 
+Сайт на сервере: http://89.208.14.36:62077/
+
+Ключи бота на этой машине лежат в `/opt/rtk/src/config/telegram.ts`. После правки выполните `systemctl restart rtk`.
+
 ## Заявки в Telegram
 
 Форма отправляет `POST /api/lead` с полями `name`, `phone`, `carInfo`, `serviceType`, `comment`.
