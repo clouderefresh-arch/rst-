@@ -24,24 +24,22 @@ export function HeroCar() {
   }, []);
 
   return (
-    <div className="relative mx-auto w-full max-w-[720px] lg:max-w-none">
-      <div className="aspect-video overflow-hidden rounded-[28px] bg-ink shadow-[0_30px_60px_-24px_rgba(0,0,0,0.7)] ring-1 ring-white/15">
-        <video
-          ref={videoRef}
-          className="h-full w-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster="/hero-car-poster.jpg"
-          width={1280}
-          height={720}
-          aria-label="Белый кроссовер на фирменном фоне РТК"
-        >
-          <source src="/hero-car.mp4" type="video/mp4" />
-        </video>
-      </div>
+    <div className="pointer-events-none absolute inset-0" aria-hidden>
+      <video
+        ref={videoRef}
+        className="h-full w-full object-cover object-[68%_center] max-lg:object-[center_42%]"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        poster="/hero-car-poster.jpg"
+        width={1280}
+        height={720}
+      >
+        <source src="/hero-car.mp4" type="video/mp4" />
+      </video>
+      <div className="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/55 to-ink/25 lg:bg-gradient-to-r lg:from-ink lg:via-ink/75 lg:via-40% lg:to-transparent" />
     </div>
   );
 }
