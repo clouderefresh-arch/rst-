@@ -63,7 +63,7 @@ export function Header() {
           href="#lead"
           className="inline-flex h-11 items-center rounded-full bg-gradient-to-r from-red-600 to-orange-500 px-3.5 text-sm font-semibold text-white shadow-lg shadow-red-950/30 transition hover:brightness-110 sm:px-5"
         >
-          Записаться
+          Заявка
         </a>
 
         <button

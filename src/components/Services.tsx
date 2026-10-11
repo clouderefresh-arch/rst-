@@ -57,7 +57,7 @@ const fleet = [
 
 export function Services() {
   return (
-    <section id="services" className="scroll-mt-28 bg-white pb-20 pt-48 sm:pt-52">
+    <section id="services" className="scroll-mt-28 bg-white pb-20 pt-16 sm:pt-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Сервис"
