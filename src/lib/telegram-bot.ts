@@ -8,6 +8,7 @@ import {
   type StoredLead,
 } from "@/lib/lead-store";
 import { chatLooksValid, readTelegramSettings, tokenLooksValid, type TelegramSettings } from "@/lib/telegram-settings";
+import { telegramRequest } from "@/lib/telegram-fetch";
 
 const PAGE_SIZE = 6;
 
@@ -78,13 +79,12 @@ function sleep(ms: number): Promise<void> {
 }
 
 async function callTelegram<T>(token: string, method: string, body: Record<string, unknown>): Promise<{ ok: boolean; result?: T; description?: string }> {
-  const response = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-    signal: AbortSignal.timeout(method === "getUpdates" ? 40_000 : 12_000),
-  });
-  return (await response.json().catch(() => null)) ?? { ok: false };
+  try {
+    return await telegramRequest<T>(token, method, body, method === "getUpdates" ? 40_000 : 12_000);
+  } catch (error) {
+    console.error("Telegram API unreachable", error instanceof Error ? error.message : "unknown");
+    return { ok: false };
+  }
 }
 
 function when(stamp: number): string {
@@ -452,6 +452,7 @@ export function startTelegramBot(): void {
   polling = true;
 
   void (async () => {
+    try {
     const settings = readTelegramSettings();
     if (tokenLooksValid(settings.token)) {
       await callTelegram(settings.token, "deleteWebhook", { drop_pending_updates: false });
@@ -471,5 +472,8 @@ export function startTelegramBot(): void {
     void poll();
     setInterval(() => void remindOnce(), 60_000);
     setTimeout(() => void remindOnce(), 10_000);
+    } catch (error) {
+      console.error("Telegram bot startup failed", error instanceof Error ? error.message : "unknown");
+    }
   })();
 }
