@@ -138,26 +138,3 @@ export function leadStatus(code: LeadErrorCode): number {
       return 500;
   }
 }
-
-export function formatLeadMessage(lead: LeadInput, sentAt: Date): string {
-  const when = new Intl.DateTimeFormat("ru-RU", {
-    timeZone: "Europe/Moscow",
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(sentAt);
-
-  const rows = [
-    "<b>Новая заявка — ООО «РТК»</b>",
-    `Дата: ${escapeHtml(when)} (МСК)`,
-    `<b>Имя:</b> ${escapeHtml(lead.name)}`,
-    `<b>Телефон:</b> ${escapeHtml(lead.phone)}`,
-    `<b>Авто / VIN:</b> ${escapeHtml(lead.carInfo || "—")}`,
-    `<b>Услуга:</b> ${escapeHtml(lead.serviceType || "—")}`,
-    `<b>Комментарий:</b> ${escapeHtml(lead.comment || "—")}`,
-  ];
-
-  return rows.join("\n");
-}

@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
-import { TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID } from "@/config/telegram";
 import {
-  formatLeadMessage,
   leadErrorMessage,
   leadStatus,
   normalizeLead,
   validateLead,
   type LeadErrorCode,
 } from "@/lib/lead";
+import { publishLead } from "@/lib/telegram-bot";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -72,34 +71,7 @@ export async function POST(request: Request) {
 
   if (isRateLimited(clientIp(request))) return fail("rate_limited");
 
-  const token = (process.env.TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN).trim();
-  const chatId = (process.env.TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID).trim();
-  const tokenOk = /^\d+:[A-Za-z0-9_-]+$/.test(token);
-  const chatOk = /^(@[A-Za-z0-9_]{5,}|-?\d+)$/.test(chatId);
-  if (!tokenOk || !chatOk) return fail("not_configured");
-
-  try {
-    const telegram = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: formatLeadMessage(lead, new Date()),
-        parse_mode: "HTML",
-        disable_web_page_preview: true,
-      }),
-      signal: AbortSignal.timeout(12_000),
-    });
-
-    const data = (await telegram.json().catch(() => null)) as { ok?: boolean } | null;
-    if (!telegram.ok || !data?.ok) {
-      console.error("Telegram lead delivery failed", telegram.status);
-      return fail("telegram");
-    }
-
-    return NextResponse.json({ ok: true });
-  } catch (error) {
-    console.error("Telegram lead request failed", error instanceof Error ? error.name : "unknown");
-    return fail("unavailable");
-  }
+  const delivered = await publishLead(lead);
+  if (delivered !== "ok") return fail(delivered);
+  return NextResponse.json({ ok: true });
 }
