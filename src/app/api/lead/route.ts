@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID } from "@/config/telegram";
 import {
   formatLeadMessage,
   leadErrorMessage,
@@ -71,8 +72,8 @@ export async function POST(request: Request) {
 
   if (isRateLimited(clientIp(request))) return fail("rate_limited");
 
-  const token = process.env.TELEGRAM_BOT_TOKEN?.trim() ?? "";
-  const chatId = process.env.TELEGRAM_CHAT_ID?.trim() ?? "";
+  const token = (process.env.TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN).trim();
+  const chatId = (process.env.TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID).trim();
   const tokenOk = /^\d+:[A-Za-z0-9_-]+$/.test(token);
   const chatOk = /^(@[A-Za-z0-9_]{5,}|-?\d+)$/.test(chatId);
   if (!tokenOk || !chatOk) return fail("not_configured");

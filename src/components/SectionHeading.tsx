@@ -8,9 +8,11 @@ type SectionHeadingProps = {
 export function SectionHeading({ eyebrow, title, text, light = false }: SectionHeadingProps) {
   return (
     <div className="max-w-3xl">
-      <p className={`text-sm font-semibold uppercase tracking-[0.18em] ${light ? "text-orange-300" : "text-orange-600"}`}>
-        {eyebrow}
-      </p>
+      {eyebrow ? (
+        <p className={`text-sm font-semibold uppercase tracking-[0.18em] ${light ? "text-orange-300" : "text-orange-600"}`}>
+          {eyebrow}
+        </p>
+      ) : null}
       <h2 className={`mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl ${light ? "text-white" : "text-slate-950"}`}>
         {title}
       </h2>

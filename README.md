@@ -10,7 +10,6 @@ Next.js (App Router), TypeScript, Tailwind CSS, lucide-react.
 
 ```bash
 npm install
-cp .env.example .env.local
 npm run dev
 ```
 
@@ -20,9 +19,11 @@ npm run dev
 
 Форма отправляет `POST /api/lead` с полями `name`, `phone`, `carInfo`, `serviceType`, `comment`.
 
-В `.env.local`:
+Откройте `src/config/telegram.ts` и вставьте между кавычками:
 
-- `TELEGRAM_BOT_TOKEN` — токен бота
-- `TELEGRAM_CHAT_ID` — чат дежурного мастера
+- `TELEGRAM_BOT_TOKEN` — токен бота от @BotFather
+- `TELEGRAM_CHAT_ID` — id чата, куда бот пишет заявки
 
-Бот должен иметь право писать в указанный чат. Без переменных API отвечает ошибкой, страница при этом открывается.
+Сохраните файл и перезапустите сайт. Бот должен иметь право писать в этот чат.
+
+Те же значения можно задать в `.env.local` (скопируйте `.env.example`). Если они заданы, они важнее файла. Без токена и id страница открывается, а форма отвечает ошибкой.

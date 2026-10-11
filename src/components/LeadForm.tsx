@@ -7,7 +7,7 @@ import { SERVICE_OPTIONS } from "@/lib/lead";
 type Status = "idle" | "loading" | "success" | "error";
 
 const fieldClass =
-  "h-12 w-full rounded-xl border-0 bg-white px-4 text-base text-slate-900 shadow-sm outline-none ring-1 ring-black/5 placeholder:text-slate-400 focus:ring-2 focus:ring-white";
+  "h-10 w-full rounded-lg border-0 bg-white px-3 text-sm text-slate-900 shadow-sm outline-none ring-1 ring-black/5 placeholder:text-slate-400 focus:ring-2 focus:ring-white";
 
 export function LeadForm() {
   const [status, setStatus] = useState<Status>("idle");
@@ -71,11 +71,11 @@ export function LeadForm() {
       id="lead"
       onSubmit={onSubmit}
       aria-busy={status === "loading"}
-      className="scroll-mt-28 rounded-[28px] bg-gradient-to-br from-red-600 via-orange-500 to-amber-500 p-4 shadow-card sm:p-6 lg:p-8"
+      className="scroll-mt-28 rounded-3xl bg-gradient-to-br from-red-600 via-orange-500 to-amber-500 p-4 shadow-card"
     >
-      <div className="mb-5 text-center">
-        <h2 className="text-2xl font-extrabold text-white sm:text-3xl">Форма записи на ремонт</h2>
-        <p className="mt-1 text-sm text-white/85">Дежурный мастер перезвонит и подтвердит визит</p>
+      <div className="mb-3 text-center">
+        <h2 className="text-lg font-extrabold leading-tight text-white">Форма записи на ремонт</h2>
+        <p className="mt-1 text-xs leading-snug text-white/85">Дежурный мастер перезвонит и подтвердит визит</p>
       </div>
 
       <div className="hidden" aria-hidden>
@@ -83,8 +83,8 @@ export function LeadForm() {
         <input id="lead-hp" name="rtk_hp" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        <div className="sm:col-span-2 lg:col-span-1">
+      <div className="grid grid-cols-1 gap-2">
+        <div>
           <label htmlFor="lead-name" className="sr-only">
             Имя
           </label>
@@ -120,7 +120,7 @@ export function LeadForm() {
         </div>
       </div>
 
-      <div className="relative mt-3">
+      <div className="relative mt-2">
         <label htmlFor="lead-service" className="sr-only">
           Тип услуги
         </label>
@@ -135,20 +135,20 @@ export function LeadForm() {
         <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" aria-hidden />
       </div>
 
-      <div className="mt-3">
+      <div className="mt-2">
         <label htmlFor="lead-comment" className="sr-only">
           Краткое описание проблемы
         </label>
         <textarea
           id="lead-comment"
           name="comment"
-          rows={4}
+          rows={2}
           placeholder="Краткое описание проблемы"
-          className="w-full resize-y rounded-xl border-0 bg-white px-4 py-3 text-base text-slate-900 shadow-sm outline-none ring-1 ring-black/5 placeholder:text-slate-400 focus:ring-2 focus:ring-white"
+          className="w-full resize-y rounded-lg border-0 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-1 ring-black/5 placeholder:text-slate-400 focus:ring-2 focus:ring-white"
         />
       </div>
 
-      <label className="mt-4 flex items-start gap-3 text-sm leading-snug text-white">
+      <label className="mt-3 flex items-start gap-2.5 text-xs leading-snug text-white">
         <input
           name="consent"
           type="checkbox"
@@ -163,28 +163,20 @@ export function LeadForm() {
         </span>
       </label>
 
-      <div className="mt-4 grid gap-3 sm:grid-cols-[1.5fr_0.9fr]">
-        <button
-          type="submit"
-          disabled={status === "loading"}
-          className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-700 via-orange-600 to-amber-400 px-4 text-sm font-bold text-white shadow-lg shadow-black/15 transition hover:brightness-110 disabled:cursor-wait disabled:opacity-70 sm:text-base"
-        >
-          {status === "loading" ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-              Отправляем…
-            </>
-          ) : (
-            "Записаться на ремонт автотранспорта"
-          )}
-        </button>
-        <a
-          href="#parts"
-          className="inline-flex h-12 items-center justify-center rounded-xl bg-ink px-4 text-sm font-semibold text-white transition hover:bg-slate-900 sm:text-base"
-        >
-          Каталог запчастей
-        </a>
-      </div>
+      <button
+        type="submit"
+        disabled={status === "loading"}
+        className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-700 via-orange-600 to-amber-400 px-3 py-2 text-center text-sm font-bold leading-tight text-white shadow-lg shadow-black/15 transition hover:brightness-110 disabled:cursor-wait disabled:opacity-70"
+      >
+        {status === "loading" ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+            Отправляем…
+          </>
+        ) : (
+          "Записаться на ремонт автотранспорта"
+        )}
+      </button>
 
       {status === "success" ? (
         <p

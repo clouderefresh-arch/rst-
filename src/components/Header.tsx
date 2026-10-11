@@ -3,7 +3,15 @@
 import { Menu, Phone, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Logo } from "@/components/Logo";
-import { NAV, PHONE_DISPLAY, PHONE_HREF } from "@/lib/site";
+import { NAV, PHONE_DISPLAY, PHONE_HREF, TELEGRAM_MANAGER_HANDLE, TELEGRAM_MANAGER_URL } from "@/lib/site";
+
+function TelegramIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden fill="currentColor">
+      <path d="M21.6 4.3 2.8 11.5c-1.2.5-1.2 1.1-.2 1.4l4.8 1.5 1.9 5.8c.2.7.1.9.8.9.4 0 .6-.2.9-.4l2.7-2.6 5.6 4.1c1 .6 1.7.3 2-.9l3.2-15.2c.4-1.4-.5-2-1.9-1.5ZM8.5 14.2l9.7-6.1c.4-.3.9 0 .5.3l-8 7.2-.3 3.4-1.9-4.8Z" />
+    </svg>
+  );
+}
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -50,14 +58,25 @@ export function Header() {
           ))}
         </nav>
 
-        <a
-          href={PHONE_HREF}
-          className="ml-auto inline-flex h-11 items-center gap-2 rounded-full px-2 text-sm font-semibold text-white lg:ml-4"
-        >
-          <Phone className="h-4 w-4 text-orange-400" aria-hidden />
-          <span className="hidden sm:inline">{PHONE_DISPLAY}</span>
-          <span className="sr-only sm:hidden">Позвонить {PHONE_DISPLAY}</span>
-        </a>
+        <div className="ml-auto flex items-center gap-1 lg:ml-4">
+          <a
+            href={PHONE_HREF}
+            className="inline-flex h-11 items-center gap-2 rounded-full px-2 text-sm font-semibold text-white"
+          >
+            <Phone className="h-4 w-4 text-orange-400" aria-hidden />
+            <span className="hidden md:inline">{PHONE_DISPLAY}</span>
+            <span className="sr-only md:hidden">Позвонить {PHONE_DISPLAY}</span>
+          </a>
+          <a
+            href={TELEGRAM_MANAGER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Написать менеджеру в Telegram ${TELEGRAM_MANAGER_HANDLE}`}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full text-[#2AABEE] transition hover:bg-white/10"
+          >
+            <TelegramIcon className="h-6 w-6" />
+          </a>
+        </div>
 
         <a
           href="#lead"
@@ -102,6 +121,15 @@ export function Header() {
             >
               <Phone className="h-4 w-4 text-orange-400" aria-hidden />
               {PHONE_DISPLAY}
+            </a>
+            <a
+              href={TELEGRAM_MANAGER_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 flex h-12 items-center justify-center gap-2 rounded-xl bg-white/5 text-base font-semibold text-white"
+            >
+              <TelegramIcon className="h-5 w-5 text-[#2AABEE]" />
+              Telegram {TELEGRAM_MANAGER_HANDLE}
             </a>
           </nav>
         </div>

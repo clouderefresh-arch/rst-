@@ -5,14 +5,14 @@ import { PHONE_HREF } from "@/lib/site";
 
 export function Hero() {
   return (
-    <section id="top" className="relative overflow-hidden bg-ink pb-16 text-white sm:pb-20">
+    <section id="top" className="relative overflow-hidden bg-ink pb-12 text-white sm:pb-16">
       <HeroCar />
-      <div className="relative mx-auto max-w-7xl px-4 pt-12 sm:px-6 lg:px-8 lg:pt-24">
+      <div className="relative z-20 mx-auto grid max-w-7xl items-start gap-8 px-4 pt-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-center lg:gap-8 lg:px-8 lg:pt-16 xl:grid-cols-[minmax(0,1fr)_380px] xl:gap-12">
         <div className="max-w-xl">
           <p className="inline-flex max-w-full items-center rounded-full bg-gradient-to-r from-red-600 to-orange-500 px-3 py-1.5 text-xs font-semibold text-white shadow-lg shadow-red-950/40 sm:text-sm">
             г. Подольск • г. Климовск • Доставка по всей РФ
           </p>
-          <h1 className="mt-5 text-[2rem] font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="mt-5 text-[2rem] font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-[2.7rem] xl:text-5xl">
             Сервисные решения для вашего автотранспорта
           </h1>
           <p className="mt-5 text-base leading-relaxed text-white/85 sm:text-lg">
@@ -35,9 +35,6 @@ export function Hero() {
             </a>
           </div>
         </div>
-      </div>
-
-      <div className="relative z-20 mx-auto mt-10 max-w-5xl px-4 sm:px-6 lg:mt-14 lg:px-8">
         <LeadForm />
       </div>
     </section>

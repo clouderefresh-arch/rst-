@@ -1,5 +1,8 @@
-export const PHONE_DISPLAY = "+7 (925) 303-12-13";
-export const PHONE_HREF = "tel:+79253031213";
+export const PHONE_DISPLAY = "+7 (495) 792-23-70";
+export const PHONE_HREF = "tel:+74957922370";
+
+export const TELEGRAM_MANAGER_URL = "https://t.me/mb4adn";
+export const TELEGRAM_MANAGER_HANDLE = "@mb4adn";
 
 export const SERVICE_ADDRESS =
   "Московская область, г.о. Подольск, посёлок Сосновый Бор, ул. Леспромхоза, 10";
@@ -15,7 +18,7 @@ export const MAP_EMBED =
 export const NAV = [
   { href: "#services", label: "Услуги" },
   { href: "#parts", label: "Запчасти" },
-  { href: "#b2b", label: "Автопаркам B2B" },
+  { href: "#fleet", label: "Автопаркам" },
   { href: "#about", label: "О компании" },
   { href: "#contacts", label: "Контакты" },
 ] as const;

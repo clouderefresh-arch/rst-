@@ -22,12 +22,12 @@ const points = [
 
 export function Fleet() {
   return (
-    <section id="b2b" className="scroll-mt-28 bg-white py-20">
+    <section id="fleet" className="scroll-mt-28 bg-white py-20">
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
         <div>
           <SectionHeading
-            eyebrow="B2B"
-            title="Автопаркам и юридическим лицам"
+            eyebrow=""
+            title="Автопаркам"
             text="Корпоративное обслуживание транспорта: сервис, запчасти и персональное сопровождение."
           />
           <ul className="mt-8 space-y-4">

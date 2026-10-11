@@ -1,3 +1,5 @@
+import { PHONE_DISPLAY } from "@/lib/site";
+
 export const SERVICE_OPTIONS = [
   "Сервисное обслуживание и ТО",
   "Ремонт узлов и агрегатов (ДВС/КПП)",
@@ -107,13 +109,13 @@ export function leadErrorMessage(code: LeadErrorCode): string {
     case "consent":
       return "Нужно согласие на обработку данных";
     case "rate_limited":
-      return "Слишком много заявок. Позвоните нам: +7 (925) 303-12-13";
+      return `Слишком много заявок. Позвоните нам: ${PHONE_DISPLAY}`;
     case "not_configured":
-      return "Сервис заявок временно недоступен. Позвоните нам: +7 (925) 303-12-13";
+      return `Сервис заявок временно недоступен. Позвоните нам: ${PHONE_DISPLAY}`;
     case "telegram":
-      return "Не удалось отправить заявку. Позвоните нам: +7 (925) 303-12-13";
+      return `Не удалось отправить заявку. Позвоните нам: ${PHONE_DISPLAY}`;
     default:
-      return "Сервер временно недоступен. Позвоните нам: +7 (925) 303-12-13";
+      return `Сервер временно недоступен. Позвоните нам: ${PHONE_DISPLAY}`;
   }
 }
 
