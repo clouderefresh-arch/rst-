@@ -5,6 +5,7 @@ export type TelegramSettings = {
   token: string;
   chatId: string;
   allowedUserIds: string[];
+  notifyUserIds: string[];
   reminderAfterMinutes: number;
   reminderRepeatMinutes: number;
   reminderMaxDays: number;
@@ -53,6 +54,13 @@ export function readTelegramSettings(): TelegramSettings {
     token: (process.env.TELEGRAM_BOT_TOKEN || stringConst(source, "TELEGRAM_BOT_TOKEN")).trim(),
     chatId: (process.env.TELEGRAM_CHAT_ID || stringConst(source, "TELEGRAM_CHAT_ID")).trim(),
     allowedUserIds: envAllowed.length ? numericIds(envAllowed) : numericIds(stringArray(source, "TELEGRAM_ALLOWED_USER_IDS")),
+    notifyUserIds: numericIds(
+      (process.env.TELEGRAM_NOTIFY_USER_IDS ?? "")
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean)
+        .concat(stringArray(source, "TELEGRAM_NOTIFY_USER_IDS")),
+    ),
     reminderAfterMinutes: numberConst(source, "TELEGRAM_REMINDER_AFTER_MINUTES", 30),
     reminderRepeatMinutes: numberConst(source, "TELEGRAM_REMINDER_REPEAT_MINUTES", 60),
     reminderMaxDays: numberConst(source, "TELEGRAM_REMINDER_MAX_DAYS", 7),

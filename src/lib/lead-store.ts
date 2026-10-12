@@ -5,6 +5,11 @@ export type LeadStatus = "new" | "progress" | "done";
 
 export type SortMode = "date_desc" | "date_asc" | "status" | "service" | "open";
 
+export type LeadCopy = {
+  chatId: string;
+  messageId: number;
+};
+
 export type StoredLead = {
   id: number;
   name: string;
@@ -18,6 +23,7 @@ export type StoredLead = {
   lastReminderAt: number | null;
   chatId: string;
   messageId: number | null;
+  copies?: LeadCopy[];
 };
 
 export type NewLead = Omit<StoredLead, "id" | "status" | "statusAt" | "lastReminderAt" | "chatId" | "messageId">;
@@ -145,7 +151,7 @@ export function createLeadStore(filePath: string) {
         return { ...lead };
       });
     },
-    update(id: number, patch: Partial<Pick<StoredLead, "status" | "statusAt" | "lastReminderAt" | "messageId" | "chatId">>): Promise<StoredLead | null> {
+    update(id: number, patch: Partial<Pick<StoredLead, "status" | "statusAt" | "lastReminderAt" | "messageId" | "chatId" | "copies">>): Promise<StoredLead | null> {
       return exclusive((data) => {
         const lead = data.leads.find((item) => item.id === id);
         if (!lead) return null;

@@ -219,6 +219,10 @@ function helpText(settings: TelegramSettings, userId: number | undefined): strin
     .join("\n");
 }
 
+function recipientIds(settings: TelegramSettings, primary: string): string[] {
+  return [...new Set([primary, ...settings.notifyUserIds].map((id) => id.trim()).filter((id) => chatLooksValid(id)))];
+}
+
 async function sendMessage(token: string, chatId: string | number, text: string, keyboard?: InlineKeyboard): Promise<{ ok: boolean; messageId: number | null }> {
   const result = await callTelegram<{ message_id: number }>(token, "sendMessage", {
     chat_id: chatId,
@@ -227,6 +231,7 @@ async function sendMessage(token: string, chatId: string | number, text: string,
     disable_web_page_preview: true,
     ...(keyboard ? { reply_markup: keyboard } : {}),
   });
+  if (!result.ok) console.error("Telegram send failed", String(chatId), result.description || "unknown");
   return { ok: result.ok, messageId: result.result?.message_id ?? null };
 }
 
@@ -277,7 +282,13 @@ export async function publishLead(lead: LeadInput): Promise<"ok" | "not_configur
       await leadStore.remove(saved.id);
       return "telegram";
     }
-    await leadStore.update(saved.id, { messageId: sent.messageId, chatId: destination });
+    const copies = [];
+    for (const chatId of recipientIds(settings, destination)) {
+      if (chatId === destination) continue;
+      const extra = await sendMessage(settings.token, chatId, cardText(saved), cardKeyboard(saved));
+      if (extra.ok && extra.messageId) copies.push({ chatId, messageId: extra.messageId });
+    }
+    await leadStore.update(saved.id, { messageId: sent.messageId, chatId: destination, copies });
     return "ok";
   } catch (error) {
     await leadStore.remove(saved.id);
@@ -295,9 +306,13 @@ async function showList(token: string, chatId: number, messageId: number | null,
 async function showCard(token: string, chatId: number, messageId: number | null, lead: StoredLead): Promise<void> {
   if (messageId) await editMessage(token, chatId, messageId, cardText(lead), cardKeyboard(lead));
   else await sendMessage(token, chatId, cardText(lead), cardKeyboard(lead));
-  const originalChat = Number(lead.chatId);
-  if (lead.messageId && Number.isFinite(originalChat) && (originalChat !== chatId || lead.messageId !== messageId)) {
-    await editMessage(token, originalChat, lead.messageId, cardText(lead), cardKeyboard(lead)).catch(() => undefined);
+  const deliveries = [
+    ...(lead.messageId ? [{ chatId: lead.chatId, messageId: lead.messageId }] : []),
+    ...(lead.copies ?? []),
+  ];
+  for (const copy of deliveries) {
+    if (String(chatId) === copy.chatId && messageId === copy.messageId) continue;
+    await editMessage(token, Number(copy.chatId), copy.messageId, cardText(lead), cardKeyboard(lead)).catch(() => undefined);
   }
 }
 
@@ -400,8 +415,13 @@ async function remindOnce(): Promise<void> {
       settings.reminderMaxDays,
     );
     if (!due.length) return;
-    const sent = await sendMessage(settings.token, settings.chatId, reminderText(due, now), reminderKeyboard(due));
-    if (sent.ok) await leadStore.markReminded(due.map((lead) => lead.id), now);
+    const targets = recipientIds(settings, resolvedChatId || settings.chatId);
+    let delivered = false;
+    for (const chatId of targets) {
+      const sent = await sendMessage(settings.token, chatId, reminderText(due, now), reminderKeyboard(due));
+      if (sent.ok) delivered = true;
+    }
+    if (delivered) await leadStore.markReminded(due.map((lead) => lead.id), now);
   } catch (error) {
     console.error("Telegram reminder failed", error instanceof Error ? error.name : "unknown");
   } finally {
