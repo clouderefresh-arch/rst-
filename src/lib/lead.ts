@@ -6,11 +6,14 @@ export const SERVICE_OPTIONS = [
   "Электрооборудование и электроника",
   "Кондиционирование",
   "Шиномонтаж и балансировка",
-  "Поставка запчастей (опт/розница)",
   "Корпоративное обслуживание",
 ] as const;
 
-export type ServiceOption = (typeof SERVICE_OPTIONS)[number];
+export const PARTS_SERVICE = "Подбор запчастей" as const;
+
+export const ACCEPTED_SERVICES = [...SERVICE_OPTIONS, PARTS_SERVICE] as const;
+
+export type ServiceOption = (typeof ACCEPTED_SERVICES)[number];
 
 export type LeadInput = {
   name: string;
@@ -65,14 +68,14 @@ function cleanMultiline(value: string, max: number): string {
 }
 
 export function isServiceOption(value: string): value is ServiceOption {
-  return (SERVICE_OPTIONS as readonly string[]).includes(value);
+  return (ACCEPTED_SERVICES as readonly string[]).includes(value);
 }
 
 export function normalizeLead(raw: Partial<Record<keyof LeadInput, unknown>>): LeadInput {
   return {
     name: cleanLine(typeof raw.name === "string" ? raw.name : "", 80),
     phone: cleanLine(typeof raw.phone === "string" ? raw.phone : "", 20),
-    carInfo: cleanLine(typeof raw.carInfo === "string" ? raw.carInfo : "", 120),
+    carInfo: cleanLine(typeof raw.carInfo === "string" ? raw.carInfo : "", 200),
     serviceType: cleanLine(typeof raw.serviceType === "string" ? raw.serviceType : "", 120),
     comment: cleanMultiline(typeof raw.comment === "string" ? raw.comment : "", 1000),
     consent: raw.consent === true,

@@ -22,7 +22,7 @@ export function Footer() {
             <p className="text-sm font-semibold uppercase tracking-[0.16em] text-orange-300">ООО «РТК»</p>
             <h2 className="mt-2 text-3xl font-extrabold">Контакты</h2>
             <p className="mt-3 text-sm leading-relaxed text-white/75">
-              Торговая компания. Сервис и поставка запчастей в Подольске и Климовске.
+              Торговая компания. Сервис грузового и коммерческого транспорта, спецтехники и поставка запчастей.
             </p>
             <ul className="mt-6 space-y-4 text-sm">
               <li className="flex gap-3">
@@ -75,8 +75,8 @@ export function Footer() {
           <div>
             <Logo className="h-14 w-auto" />
             <p className="mt-4 max-w-sm text-sm leading-relaxed">
-              ООО «РТК». Торговая компания. Ремонт легкового и грузового транспорта, спецтехники, поставки
-              запчастей оптом и в розницу.
+              ООО «РТК». Торговая компания. Ремонт грузового транспорта, коммерческих легковых и спецтехники.
+              Поставки запчастей европейских и азиатских марок оптом и в розницу.
             </p>
           </div>
           <div>

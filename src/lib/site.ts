@@ -7,7 +7,7 @@ export const TELEGRAM_MANAGER_HANDLE = "@mb4adn";
 export const SERVICE_ADDRESS =
   "Московская область, г.о. Подольск, посёлок Сосновый Бор, ул. Леспромхоза, 10";
 
-export const WORK_HOURS = "Ежедневно, 08:00–21:00";
+export const WORK_HOURS = "Ежедневно, 09:00–20:00";
 
 export const MAP_LINK =
   "https://yandex.ru/navi/org/moskovskiy_vnedorozhny_klub/12585151393?si=ek4vwjbxavewdfebfx6z54n2m8";

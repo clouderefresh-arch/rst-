@@ -14,8 +14,8 @@ export default function HomePage() {
       <main>
         <Hero />
         <Services />
-        <Advantages />
         <Parts />
+        <Advantages />
         <Fleet />
         <About />
       </main>

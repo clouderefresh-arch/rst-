@@ -15,9 +15,11 @@ export function Hero() {
           <h1 className="mt-5 text-[2rem] font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-[2.7rem] xl:text-5xl">
             Сервисные решения для вашего автотранспорта
           </h1>
-          <p className="mt-5 text-base leading-relaxed text-white/85 sm:text-lg">
-            Комплексный ремонт легковых и грузовых автомобилей, спецтехники. Поставки запчастей и
-            расходных материалов оптом и в розницу.
+          <p className="mt-5 text-sm leading-relaxed text-white/85 sm:text-base">
+            Комплексный ремонт и сервисное обслуживание грузовых, легковых автомобилей и спецтехники.
+            Подбор запчастей, ремонт и обслуживание с использованием комплектующих, имеющихся на
+            собственном складе. Поставки запчастей и расходных материалов оптом и в розницу для
+            европейских и азиатских марок.
           </p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <a

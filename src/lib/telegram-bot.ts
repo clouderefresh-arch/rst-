@@ -1,4 +1,4 @@
-import { escapeHtml, type LeadInput } from "@/lib/lead";
+import { escapeHtml, PARTS_SERVICE, type LeadInput } from "@/lib/lead";
 import {
   leadStore,
   leadsDueForReminder,
@@ -105,7 +105,7 @@ export function cardText(lead: StoredLead): string {
     `Дата: ${escapeHtml(when(lead.createdAt))} (МСК)`,
     `<b>Имя:</b> ${escapeHtml(lead.name)}`,
     `<b>Телефон:</b> ${escapeHtml(lead.phone)}`,
-    `<b>Авто / VIN:</b> ${escapeHtml(lead.carInfo || "—")}`,
+    `<b>${lead.serviceType === PARTS_SERVICE ? "Партномер / VIN" : "Авто / VIN"}:</b> ${escapeHtml(lead.carInfo || "—")}`,
     `<b>Услуга:</b> ${escapeHtml(lead.serviceType || "—")}`,
     `<b>Комментарий:</b> ${escapeHtml(lead.comment || "—")}`,
   ].join("\n");

@@ -25,7 +25,7 @@ const banners: {
   {
     icon: Warehouse,
     title: "Собственный склад деталей и экспресс-подбор запчастей по VIN",
-    text: "Оригиналы и аналоги, масла, фильтры и технические жидкости подбираем по VIN.",
+    text: "Оригиналы и аналоги европейских и азиатских марок подбираем по партномеру и VIN со своего склада.",
     className: "bg-slate-900",
     plate: "bg-gradient-to-bl from-red-600 to-orange-500",
   },
@@ -45,7 +45,7 @@ export function Advantages() {
         <SectionHeading
           eyebrow="Почему РТК"
           title="Наши преимущества"
-          text="Сервис и поставки для частных клиентов, автопарков и компаний."
+          text="В первую очередь работаем с автопарками и компаниями. Частный легковой транспорт принимаем по записи."
         />
         <div className="mt-10 grid gap-4 lg:grid-cols-2">
           {banners.map((banner) => {
@@ -66,10 +66,10 @@ export function Advantages() {
                   <h3 className="text-2xl font-extrabold leading-tight">{banner.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-white/90 sm:text-base">{banner.text}</p>
                   <a
-                    href="#lead"
+                    href={banner.icon === Warehouse ? "#parts-lead" : "#lead"}
                     className="mt-6 inline-flex h-11 items-center rounded-full bg-white px-5 text-sm font-semibold text-slate-950 transition hover:bg-amber-50"
                   >
-                    Записаться
+                    {banner.icon === Warehouse ? "Подобрать запчасти" : "Записаться"}
                   </a>
                 </div>
               </article>

@@ -1,4 +1,5 @@
 import { Cog, Cpu, Disc, Droplets, type LucideIcon } from "lucide-react";
+import { LeadForm } from "@/components/LeadForm";
 import { SectionHeading } from "@/components/SectionHeading";
 
 const categories: { icon: LucideIcon; title: string; text: string }[] = [
@@ -33,12 +34,15 @@ export function Parts() {
         aria-hidden
       />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          eyebrow="Снабжение"
-          title="Запчасти оптом и в розницу"
-          text="Оригиналы и аналоги, масла, фильтры и техжидкости. Подбор по VIN, собственный склад, доставка по Московской области и всей России."
-          light
-        />
+        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_400px]">
+          <SectionHeading
+            eyebrow="Снабжение"
+            title="Запчасти для коммерческого транспорта"
+            text="Подбор по партномеру или VIN для грузовых, легковых корпоративных парков и спецтехники. Европейские и азиатские марки, собственный склад, опт и розница, доставка по Московской области и всей России."
+            light
+          />
+          <LeadForm purpose="parts" />
+        </div>
         <div className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {categories.map((item) => {
             const Icon = item.icon;
@@ -53,12 +57,6 @@ export function Parts() {
             );
           })}
         </div>
-        <a
-          href="#lead"
-          className="mt-8 inline-flex h-12 items-center rounded-xl bg-gradient-to-r from-red-600 via-orange-500 to-amber-500 px-6 text-sm font-semibold text-white"
-        >
-          Запросить подбор запчастей
-        </a>
       </div>
     </section>
   );
