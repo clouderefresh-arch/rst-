@@ -27,17 +27,17 @@ export function HeroCar() {
     <div className="pointer-events-none absolute inset-0" aria-hidden>
       <video
         ref={videoRef}
-        className="h-full w-full object-cover object-[68%_center] max-lg:object-[center_42%]"
+        className="h-full w-full object-cover object-center"
         autoPlay
         muted
         loop
         playsInline
-        preload="metadata"
-        poster="/hero-car-poster.jpg"
+        preload="auto"
+        poster="/hero-truck-poster.jpg"
         width={1280}
         height={720}
       >
-        <source src="/hero-car.mp4" type="video/mp4" />
+        <source src="/hero-truck.mp4" type="video/mp4" />
       </video>
       <div className="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/55 to-ink/25 lg:bg-gradient-to-r lg:from-ink lg:via-ink/75 lg:via-40% lg:to-transparent" />
     </div>
