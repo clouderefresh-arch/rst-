@@ -23,10 +23,11 @@ async function candidateIps(): Promise<string[]> {
   return unique([workingIp, ...FALLBACK_IPS, ...resolved]);
 }
 
-function postJson(
+function postBody(
   ip: string,
   path: string,
-  payload: string,
+  payload: string | Buffer,
+  contentType: string,
   timeoutMs: number,
 ): Promise<{ ok: boolean; result?: unknown; description?: string }> {
   return new Promise((resolve, reject) => {
@@ -36,7 +37,7 @@ function postJson(
         path,
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": contentType,
           "Content-Length": Buffer.byteLength(payload),
         },
         lookup: (hostname, options, callback) => {
@@ -66,25 +67,56 @@ function postJson(
   });
 }
 
-export async function telegramRequest<T>(
+async function postToTelegram(
   token: string,
   method: string,
-  body: Record<string, unknown>,
+  payload: string | Buffer,
+  contentType: string,
   timeoutMs: number,
-): Promise<{ ok: boolean; result?: T; description?: string }> {
-  const payload = JSON.stringify(body);
+): Promise<{ ok: boolean; result?: unknown; description?: string }> {
   const ips = await candidateIps();
   let lastError: Error | null = null;
 
   for (const ip of ips) {
     try {
-      const result = await postJson(ip, `/bot${token}/${method}`, payload, timeoutMs);
+      const result = await postBody(ip, `/bot${token}/${method}`, payload, contentType, timeoutMs);
       workingIp = ip;
-      return result as { ok: boolean; result?: T; description?: string };
+      return result;
     } catch (error) {
       lastError = error instanceof Error ? error : new Error("telegram-unreachable");
     }
   }
 
   throw lastError ?? new Error("telegram-unreachable");
+}
+
+export async function telegramRequest<T>(
+  token: string,
+  method: string,
+  body: Record<string, unknown>,
+  timeoutMs: number,
+): Promise<{ ok: boolean; result?: T; description?: string }> {
+  const result = await postToTelegram(token, method, JSON.stringify(body), "application/json", timeoutMs);
+  return result as { ok: boolean; result?: T; description?: string };
+}
+
+export async function telegramSendDocument(
+  token: string,
+  chatId: string | number,
+  filename: string,
+  file: Buffer,
+  caption: string,
+): Promise<{ ok: boolean; description?: string }> {
+  const boundary = `----rtk${Date.now().toString(16)}`;
+  const body = Buffer.concat([
+    Buffer.from(
+      `--${boundary}\r\nContent-Disposition: form-data; name="chat_id"\r\n\r\n${chatId}\r\n` +
+        `--${boundary}\r\nContent-Disposition: form-data; name="caption"\r\n\r\n${caption}\r\n` +
+        `--${boundary}\r\nContent-Disposition: form-data; name="document"; filename="${filename}"\r\n` +
+        `Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\r\n\r\n`,
+    ),
+    file,
+    Buffer.from(`\r\n--${boundary}--\r\n`),
+  ]);
+  return postToTelegram(token, "sendDocument", body, `multipart/form-data; boundary=${boundary}`, 20_000);
 }

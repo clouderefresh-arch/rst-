@@ -1,4 +1,5 @@
 import { escapeHtml, PARTS_SERVICE, type LeadInput } from "@/lib/lead";
+import { leadsWorkbook } from "@/lib/leads-xlsx";
 import {
   leadStore,
   leadsDueForReminder,
@@ -7,8 +8,9 @@ import {
   type SortMode,
   type StoredLead,
 } from "@/lib/lead-store";
+import { addSubscriber, removeSubscriber, subscriberIds } from "@/lib/subscribers";
 import { chatLooksValid, readTelegramSettings, tokenLooksValid, type TelegramSettings } from "@/lib/telegram-settings";
-import { telegramRequest } from "@/lib/telegram-fetch";
+import { telegramRequest, telegramSendDocument } from "@/lib/telegram-fetch";
 
 const PAGE_SIZE = 6;
 
@@ -212,6 +214,12 @@ function helpText(settings: TelegramSettings, userId: number | undefined): strin
     "/leads — список, сначала новые",
     "/open — только не обработанные",
     "/sort — те же заявки, под сообщением кнопки сортировки: по дате, статусу и услуге",
+    "/export — выгрузить все заявки в Excel",
+    "/subscribers — кто получает заявки",
+    "/add 123456789 — добавить человека в рассылку",
+    "/remove 123456789 — убрать человека из рассылки",
+    "",
+    "Основной чат получает заявки всегда. /add добавляет ещё один чат: человек сначала нажимает /start у этого бота.",
     "",
     access,
   ]
@@ -219,8 +227,9 @@ function helpText(settings: TelegramSettings, userId: number | undefined): strin
     .join("\n");
 }
 
-function recipientIds(settings: TelegramSettings, primary: string): string[] {
-  return [...new Set([primary, ...settings.notifyUserIds].map((id) => id.trim()).filter((id) => chatLooksValid(id)))];
+async function recipientIds(settings: TelegramSettings, primary: string): Promise<string[]> {
+  const extra = await subscriberIds(settings.notifyUserIds);
+  return [...new Set([primary, ...extra].map((id) => id.trim()).filter((id) => chatLooksValid(id)))];
 }
 
 async function sendMessage(token: string, chatId: string | number, text: string, keyboard?: InlineKeyboard): Promise<{ ok: boolean; messageId: number | null }> {
@@ -283,7 +292,7 @@ export async function publishLead(lead: LeadInput): Promise<"ok" | "not_configur
       return "telegram";
     }
     const copies = [];
-    for (const chatId of recipientIds(settings, destination)) {
+    for (const chatId of await recipientIds(settings, destination)) {
       if (chatId === destination) continue;
       const extra = await sendMessage(settings.token, chatId, cardText(saved), cardKeyboard(saved));
       if (extra.ok && extra.messageId) copies.push({ chatId, messageId: extra.messageId });
@@ -378,7 +387,9 @@ async function handleUpdate(update: TelegramUpdate): Promise<void> {
   const message = update.message;
   const text = message?.text?.trim();
   if (!message || !text) return;
-  const command = text.match(/^\/([a-z0-9_]+)(?:@\w+)?(?:\s|$)/i)?.[1]?.toLowerCase();
+  const parsed = text.match(/^\/([a-z0-9_]+)(?:@\w+)?(?:\s+([\s\S]+))?$/i);
+  const command = parsed?.[1]?.toLowerCase();
+  const arg = parsed?.[2]?.trim() ?? "";
   if (!command) return;
 
   if (command === "start" || command === "help") {
@@ -397,6 +408,55 @@ async function handleUpdate(update: TelegramUpdate): Promise<void> {
   }
   if (command === "open") {
     await showList(settings.token, message.chat.id, null, "open", 0);
+    return;
+  }
+  if (command === "export") {
+    await sendLeadsFile(settings.token, message.chat.id);
+    return;
+  }
+  if (command === "subscribers") {
+    const ids = await subscriberIds(settings.notifyUserIds);
+    await sendMessage(
+      settings.token,
+      message.chat.id,
+      ids.length ? `Рассылка заявок, кроме основного чата:\n${ids.map((id) => `• <code>${id}</code>`).join("\n")}` : "Дополнительная рассылка пуста. Основной чат заявки всё равно получает.",
+    );
+    return;
+  }
+  if (command === "add" || command === "remove") {
+    if (!/^-?\d{5,20}$/.test(arg)) {
+      await sendMessage(settings.token, message.chat.id, "Укажите Telegram id числом. Пример: /add 1128306543");
+      return;
+    }
+    if (command === "add") {
+      const ids = await addSubscriber(settings.notifyUserIds, arg);
+      const welcome = await sendMessage(
+        settings.token,
+        arg,
+        "Вас добавили к уведомлениям о заявках ООО «РТК». Новые заявки с сайта будут приходить сюда.",
+      );
+      const note = welcome.ok
+        ? "Сообщение человеку отправлено."
+        : "Бот пока не смог написать этому человеку. Пусть откроет бота и нажмёт /start.";
+      await sendMessage(settings.token, message.chat.id, `Добавлен в рассылку: <code>${arg}</code>. ${note}\nСейчас в списке: ${ids.map((id) => `<code>${id}</code>`).join(", ")}`);
+      return;
+    }
+    const ids = await removeSubscriber(settings.notifyUserIds, arg);
+    await sendMessage(
+      settings.token,
+      message.chat.id,
+      `Убран из рассылки: <code>${arg}</code>.${ids.length ? ` Остались: ${ids.map((id) => `<code>${id}</code>`).join(", ")}` : " Дополнительный список пуст."}`,
+    );
+  }
+}
+
+async function sendLeadsFile(token: string, chatId: number): Promise<void> {
+  const leads = await leadStore.list();
+  const day = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Moscow" }).format(new Date());
+  const sent = await telegramSendDocument(token, chatId, `zayavki-rtk-${day}.xlsx`, leadsWorkbook(leads), `Заявки ООО «РТК»: ${leads.length}`);
+  if (!sent.ok) {
+    console.error("Telegram export failed", sent.description || "unknown");
+    await sendMessage(token, chatId, "Не удалось отправить файл Excel. Попробуйте ещё раз.");
   }
 }
 
@@ -415,7 +475,7 @@ async function remindOnce(): Promise<void> {
       settings.reminderMaxDays,
     );
     if (!due.length) return;
-    const targets = recipientIds(settings, resolvedChatId || settings.chatId);
+    const targets = await recipientIds(settings, resolvedChatId || settings.chatId);
     let delivered = false;
     for (const chatId of targets) {
       const sent = await sendMessage(settings.token, chatId, reminderText(due, now), reminderKeyboard(due));
@@ -481,6 +541,10 @@ export function startTelegramBot(): void {
           { command: "leads", description: "Список заявок" },
           { command: "open", description: "Только не обработанные" },
           { command: "sort", description: "Сортировка заявок" },
+          { command: "export", description: "Выгрузить заявки в Excel" },
+          { command: "subscribers", description: "Кто получает заявки" },
+          { command: "add", description: "Добавить id в рассылку" },
+          { command: "remove", description: "Убрать id из рассылки" },
           { command: "help", description: "Что умеет бот" },
         ],
       });

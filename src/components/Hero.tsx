@@ -10,10 +10,10 @@ export function Hero() {
       <div className="relative z-20 mx-auto grid max-w-7xl items-start gap-8 px-4 pt-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-center lg:gap-8 lg:px-8 lg:pt-16 xl:grid-cols-[minmax(0,1fr)_380px] xl:gap-12">
         <div className="max-w-xl">
           <p className="inline-flex max-w-full items-center rounded-full bg-gradient-to-r from-red-600 to-orange-500 px-3 py-1.5 text-xs font-semibold text-white shadow-lg shadow-red-950/40 sm:text-sm">
-            г. Подольск • г. Климовск • Доставка по всей РФ
+            г. Подольск • Доставка по всей РФ
           </p>
           <h1 className="mt-5 text-[2rem] font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-[2.7rem] xl:text-5xl">
-            Сервисные решения для вашего автотранспорта
+            Сервисные решения и поставка запчастей для вашего автотранспорта
           </h1>
           <p className="mt-5 text-sm leading-relaxed text-white/85 sm:text-base">
             Комплексный ремонт и сервисное обслуживание грузовых, легковых автомобилей и спецтехники.

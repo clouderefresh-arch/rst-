@@ -9,27 +9,31 @@ export function Footer() {
     <>
       <section id="contacts" className="scroll-mt-28 bg-white py-20">
         <div className="mx-auto grid max-w-7xl gap-4 px-4 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:px-8">
-          <div className="overflow-hidden rounded-[28px] bg-slate-100 shadow-card ring-1 ring-slate-200">
+          <div className="relative overflow-hidden rounded-[28px] bg-slate-100 shadow-card ring-1 ring-slate-200">
             <iframe
-              title="Карта сервиса ООО «РТК»"
+              title="Карта сервиса РТК"
               src={MAP_EMBED}
               className="h-[320px] w-full sm:h-[420px]"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
+            <p className="pointer-events-none absolute left-4 top-4 rounded-2xl bg-white px-4 py-2 text-sm font-extrabold text-slate-950 shadow-card">
+              РТК
+              <span className="mt-0.5 block text-xs font-medium text-slate-600">ул. Леспромхоза, 10а</span>
+            </p>
           </div>
           <div className="flex flex-col rounded-[28px] bg-ink p-6 text-white sm:p-8">
             <p className="text-sm font-semibold uppercase tracking-[0.16em] text-orange-300">ООО «РТК»</p>
             <h2 className="mt-2 text-3xl font-extrabold">Контакты</h2>
             <p className="mt-3 text-sm leading-relaxed text-white/75">
-              Торговая компания. Сервис грузового и коммерческого транспорта, спецтехники и поставка запчастей.
+              Торгово-сервисная компания. Сервис грузового и коммерческого транспорта, спецтехники и поставка запчастей.
             </p>
             <ul className="mt-6 space-y-4 text-sm">
               <li className="flex gap-3">
                 <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-orange-400" aria-hidden />
                 <span>
-                  <span className="block font-semibold">Города обслуживания</span>
-                  <span className="text-white/75">Подольск и Климовск</span>
+                  <span className="block font-semibold">Город обслуживания</span>
+                  <span className="text-white/75">Подольск</span>
                   <span className="mt-1 block text-white/75">{SERVICE_ADDRESS}</span>
                 </span>
               </li>
@@ -94,7 +98,7 @@ export function Footer() {
           <div id="privacy">
             <p className="text-sm font-semibold uppercase tracking-[0.16em] text-white">Реквизиты и данные</p>
             <p className="mt-4 text-sm leading-relaxed">
-              ООО «РТК». {SERVICE_ADDRESS}. Города обслуживания: Подольск и Климовск. Телефон: {PHONE_DISPLAY}.
+              ООО «РТК». {SERVICE_ADDRESS}. Город обслуживания: Подольск. Телефон: {PHONE_DISPLAY}.
               График: {WORK_HOURS.toLowerCase()}. Полные реквизиты для договора направляем по запросу.
             </p>
             <p className="mt-3 text-sm leading-relaxed">
